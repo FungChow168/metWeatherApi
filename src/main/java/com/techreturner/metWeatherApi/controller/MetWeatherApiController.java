@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,8 +24,10 @@ public class MetWeatherApiController {
     public ResponseEntity<String> testing(){return new ResponseEntity<String>("Hello World",HttpStatus.OK);};
 
     @GetMapping({"/getForecast"})
-    public ResponseEntity<String> getForcast(@RequestParam String location){
-        return new ResponseEntity<String>(metWeatherApiService.getForecast(location), HttpStatus.OK);
+    public ResponseEntity<String> getForecast(@RequestParam String location) throws IOException, InterruptedException {
+
+            return new ResponseEntity<String>(metWeatherApiService.getForecast(location), HttpStatus.OK);
+
     }
 
 }

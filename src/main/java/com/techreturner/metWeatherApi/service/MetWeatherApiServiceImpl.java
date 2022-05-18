@@ -1,21 +1,57 @@
 package com.techreturner.metWeatherApi.service;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.URI;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+
 @Service
-public class MetWeatherApiServiceImpl implements MetWeatherApiService{
+public class MetWeatherApiServiceImpl implements MetWeatherApiService {
+
 
     @Override
-    public String getForecast(String location){
-        return String.format("%s is sunny", location);
-    }
+    public String getForecast(String location) {
 
-    public Long getLocationId(){
 
-    }
+        ObjectMapper mapper = new ObjectMapper();
+        Accessories accessories = null;
 
-    public String getForecast(){
+        final String prefix = "http://api.openweathermap.org/data/2.5/weather?q=";
+        final String suffix = "&APPID=cf79806101d2e4cb25066d0d4b04ae56";
 
+        HttpResponse<String> response = null;
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(prefix+location+suffix))
+                .build();
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            JsonNode jsonNode = mapper.readTree(response.body());
+            accessories = new Accessories(jsonNode.get("main").get("temp").toString()
+                                          ,jsonNode.get("main").get("feels_like").toString()
+                                            ,jsonNode.get("main").get("temp_min").toString()
+                                        ,jsonNode.get("main").get("temp_max").toString()
+                                        ,jsonNode.get("weather").get(0).get("description").toString().replace("\"", "")
+                                        ,jsonNode.get("name").toString().replace("\"", ""));
+
+        }catch(IOException ioe) {
+            ioe.printStackTrace();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+//        return response.body();
+        return accessories.getJsonString();
     }
 
 }
