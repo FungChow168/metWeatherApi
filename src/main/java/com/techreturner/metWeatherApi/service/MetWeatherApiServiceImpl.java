@@ -1,6 +1,7 @@
 package com.techreturner.metWeatherApi.service;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class MetWeatherApiServiceImpl implements MetWeatherApiService {
@@ -37,6 +39,8 @@ public class MetWeatherApiServiceImpl implements MetWeatherApiService {
                 .build();
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 404)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, location + " is not on the location list.  Please check the spelling and try again.");
             JsonNode jsonNode = mapper.readTree(response.body());
             accessories = new Accessories(jsonNode.get("main").get("temp").toString()
                                           ,jsonNode.get("main").get("feels_like").toString()
@@ -45,10 +49,8 @@ public class MetWeatherApiServiceImpl implements MetWeatherApiService {
                                         ,jsonNode.get("weather").get(0).get("description").toString().replace("\"", "")
                                         ,jsonNode.get("name").toString().replace("\"", ""));
 
-        }catch(IOException ioe) {
-            ioe.printStackTrace();
-        }catch(InterruptedException e){
-            e.printStackTrace();
+        }catch(IOException | InterruptedException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error.", e);
         }
 //        return response.body();
         return accessories.getJsonString();
