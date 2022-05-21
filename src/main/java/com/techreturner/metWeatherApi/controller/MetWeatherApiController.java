@@ -28,4 +28,11 @@ public class MetWeatherApiController {
         return ResponseEntity.ok().headers(httpHeaders).body(metWeatherApiService.getForecast(location));
     }
 
+    @GetMapping({"/info"})
+    public ResponseEntity<String> getInfo() throws IOException, InterruptedException {
+
+        return new ResponseEntity<String>("How to use this API: To get the weather details for a location, enter the name of the city or country in the location field.", HttpStatus.OK);
+
+    }
+
 }
