@@ -27,6 +27,7 @@ public class MetWeatherApiServiceImpl implements MetWeatherApiService {
 
         ObjectMapper mapper = new ObjectMapper();
         Accessories accessories = null;
+        String trimmedLocation = location.trim();
 
         final String prefix = "http://api.openweathermap.org/data/2.5/weather?q=";
         final String suffix = "&APPID=cf79806101d2e4cb25066d0d4b04ae56";
@@ -35,12 +36,12 @@ public class MetWeatherApiServiceImpl implements MetWeatherApiService {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(prefix+location+suffix))
+                .uri(URI.create(prefix + trimmedLocation + suffix))
                 .build();
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 404)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, location + " is not on the location list.  Please check the spelling and try again.");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, trimmedLocation + " is not on the location list.  Please check the spelling and try again.");
             JsonNode jsonNode = mapper.readTree(response.body());
             accessories = new Accessories(jsonNode.get("main").get("temp").toString()
                                           ,jsonNode.get("main").get("feels_like").toString()

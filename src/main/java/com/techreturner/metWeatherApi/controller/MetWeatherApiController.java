@@ -1,7 +1,5 @@
 package com.techreturner.metWeatherApi.controller;
 
-//import com.techreturners.bookmanager.model.Book;
-//import com.techreturners.bookmanager.service.BookManagerService;
 import com.techreturner.metWeatherApi.service.MetWeatherApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,9 +23,9 @@ public class MetWeatherApiController {
 
     @GetMapping({"/getForecast"})
     public ResponseEntity<String> getForecast(@RequestParam String location) throws IOException, InterruptedException {
-
-            return new ResponseEntity<String>(metWeatherApiService.getForecast(location), HttpStatus.OK);
-
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Type", "application/json");
+        return ResponseEntity.ok().headers(httpHeaders).body(metWeatherApiService.getForecast(location));
     }
 
 }
