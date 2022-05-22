@@ -17,7 +17,8 @@ public class MetWeatherApiController {
 
     @Autowired
     MetWeatherApiService metWeatherApiService;
-    
+
+
 
     @GetMapping({"/getForecast"})
     public ResponseEntity<String> getForecast(@RequestParam String location) throws IOException, InterruptedException {
