@@ -58,7 +58,12 @@ public class MetWeatherControllerTest {
                         MockMvcRequestBuilders.get("/api/v1/getForecast?location=Reading"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.temp").value(15.7))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.location").value("Reading"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.feels_like").value(15.1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.temp_min").value(14.6))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.temp_max").value(17.4))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("overcast clouds"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.location").value("Reading"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.suggestions").value("Put on a jacket. "));
     }
 
 }
