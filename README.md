@@ -71,7 +71,7 @@ The team initially came together and adopted the [MoSCoW](https://www.productpla
 
 * Created a Dockerfile for creating a Docker image
 * Zipped all project files into Archive.zip and uploaded the zip file to AWS cloud.
-* Deployed Weather API on AWS Cloud and it is ready for demo
+* Deployed Weather API on AWS Cloud and it is ready for demo 
 
 ## Conclusions
  
