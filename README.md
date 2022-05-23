@@ -23,7 +23,7 @@ Develop a Weather API to;
 # Weather API
 
 ## Approach
-
+![diagram](./docs/WeatherAPIFlowchart.png)
 ###  Phase 1
 The team initially came together and adopted the [MoSCoW](https://www.productplan.com/glossary/moscow-prioritization/) Framework to help define the scope of the project and Minimum Viable Product (MVP).
 
